@@ -13,6 +13,8 @@ qt_standard_project_setup(REQUIRES 6.9.1)
 
 qt_add_executable(Serega
     src/main.cpp
+    src/core/CryptoManager.cpp
+    include/core/CryptoManager.hpp
 )
 
 qt_add_qml_module(Serega
@@ -38,6 +40,9 @@ add_subdirectory(libraries/libsodium)
 
 target_link_libraries(Serega
     PRIVATE Qt6::Quick sodium
+)
+target_include_directories(Serega
+    PRIVATE include
 )
 
 include(GNUInstallDirs)
