@@ -5,7 +5,7 @@ qt_add_executable(tests
 )
 
 target_link_libraries(tests
-    PRIVATE Catch2WithMain sodium SeregaLib
+    PRIVATE Catch2WithMain SeregaLib
 )
 
 target_include_directories(tests

@@ -1,4 +1,4 @@
-#include "core/CryptoManager.hpp"
+#include "crypto/CryptoManager.hpp"
 
 #include <QDebug>
 
@@ -6,7 +6,7 @@ CryptoManager::CryptoManager(QObject* parent)
     : QObject(parent)
 {
     if(sodium_init() < 0)
-        qCritical() << "Failed to initialize crypto";
+        qFatal() << "Failed to initialize crypto";
 }
 
 void CryptoManager::initKeys()
@@ -34,10 +34,7 @@ void CryptoManager::initSession(const std::array<uint8_t, crypto_kx_PUBLICKEYBYT
         );
 
     if(ret != 0)
-    {
         qCritical() << "Failed to initialize session keys";
-        return;
-    }
 
     sessionKeyRx = std::move(rx);
     sessionKeyTx = std::move(tx);

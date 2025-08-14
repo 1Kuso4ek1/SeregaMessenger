@@ -1,8 +1,10 @@
 #include <catch2/catch_test_macros.hpp>
 
+#include <QCoreApplication>
 #include <QDebug>
 
-#include "core/CryptoManager.hpp"
+#include "crypto/CryptoManager.hpp"
+#include "storage/CryptoStorage.hpp"
 
 TEST_CASE("Basic encryption and decryption")
 {
@@ -22,4 +24,25 @@ TEST_CASE("Basic encryption and decryption")
     qDebug() << "Message: " << message << "\nDecrypted: " << decrypted;
 
     REQUIRE(message == decrypted);
+}
+
+TEST_CASE("Crypto storage test")
+{
+    int argc{};
+
+    QCoreApplication app(argc, nullptr);
+    CryptoStorage storage;
+
+    storage.saveIdentityKeyPair({ 1, 2, 3, 4 }, { 2, 3, 4, 5 });
+    storage.savePreKeyPair({ 4, 3, 2, 1 }, { 5, 4, 3, 2 });
+
+    Key identityPub, identityPriv, preKeyPub, preKeyPriv;
+
+    REQUIRE(storage.loadIdentityKeyPair(identityPub, identityPriv));
+    REQUIRE(storage.loadPreKeyPair(preKeyPub, preKeyPriv));
+
+    REQUIRE(identityPub[0] == 1);
+    REQUIRE(identityPriv[0] == 2);
+    REQUIRE(preKeyPub[0] == 4);
+    REQUIRE(preKeyPriv[0] == 5);
 }

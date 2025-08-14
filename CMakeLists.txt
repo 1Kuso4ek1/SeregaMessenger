@@ -16,8 +16,13 @@ find_package(Qt6 REQUIRED COMPONENTS Quick)
 qt_standard_project_setup(REQUIRES 6.9.1)
 
 qt_add_library(SeregaLib
-    include/core/CryptoManager.hpp
-    src/core/CryptoManager.cpp
+    include/core/SeregaApp.hpp
+    include/crypto/CryptoManager.hpp
+    include/storage/CryptoStorage.hpp
+
+    src/core/SeregaApp.cpp
+    src/crypto/CryptoManager.cpp
+    src/storage/CryptoStorage.cpp
 )
 
 qt_add_executable(Serega
@@ -43,21 +48,26 @@ set_target_properties(Serega PROPERTIES
 )
 
 set(SODIUM_DISABLE_TESTS ON)
+set(BUILD_WITH_QT6 ON)
+
 add_subdirectory(libraries/libsodium)
+add_subdirectory(libraries/qtkeychain)
 add_subdirectory(libraries/Catch2)
+
+message(INFO ${QTKEYCHAIN_TARGET_NAME})
 
 if(BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
 target_link_libraries(SeregaLib
-    PRIVATE Qt6::Core sodium
+    PUBLIC Qt6::Core Qt6::Quick qt6keychain sodium
 )
 target_link_libraries(Serega
-    PRIVATE Qt6::Quick SeregaLib
+    PRIVATE SeregaLib
 )
 
-include_directories(include)
+include_directories(include include/core)
 
 include(GNUInstallDirs)
 install(TARGETS Serega
