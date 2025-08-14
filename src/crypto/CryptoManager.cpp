@@ -17,7 +17,7 @@ void CryptoManager::initKeys()
 
 void CryptoManager::initSession(const std::array<uint8_t, crypto_kx_PUBLICKEYBYTES>& peerPublic, const bool isServer)
 {
-    std::array<uint8_t, crypto_kx_SESSIONKEYBYTES> rx, tx;
+    std::array<uint8_t, crypto_kx_SESSIONKEYBYTES> rx{}, tx{};
 
     int ret{};
     if(isServer)
@@ -36,8 +36,8 @@ void CryptoManager::initSession(const std::array<uint8_t, crypto_kx_PUBLICKEYBYT
     if(ret != 0)
         qCritical() << "Failed to initialize session keys";
 
-    sessionKeyRx = std::move(rx);
-    sessionKeyTx = std::move(tx);
+    sessionKeyRx = rx;
+    sessionKeyTx = tx;
 }
 
 void CryptoManager::save() const
@@ -64,7 +64,7 @@ std::array<uint8_t, 32> CryptoManager::getPublicPreKey() const
 
 std::vector<uint8_t> CryptoManager::encrypt(const QString& text) const
 {
-    std::array<uint8_t, crypto_aead_xchacha20poly1305_ietf_NPUBBYTES> nonce;
+    std::array<uint8_t, crypto_aead_xchacha20poly1305_ietf_NPUBBYTES> nonce{};
     randombytes_buf(nonce.data(), nonce.size());
 
     const auto utf8 = text.toUtf8();
@@ -87,7 +87,7 @@ std::vector<uint8_t> CryptoManager::encrypt(const QString& text) const
 
 QString CryptoManager::decrypt(const std::vector<uint8_t>& data) const
 {
-    std::array<uint8_t, crypto_aead_xchacha20poly1305_ietf_NPUBBYTES> nonce;
+    std::array<uint8_t, crypto_aead_xchacha20poly1305_ietf_NPUBBYTES> nonce{};
     std::copy_n(data.begin(), nonce.size(), nonce.begin());
 
     const std::vector plainData(data.begin() + nonce.size(), data.end());
@@ -108,5 +108,5 @@ QString CryptoManager::decrypt(const std::vector<uint8_t>& data) const
         return {};
     }
 
-    return QString::fromUtf8(reinterpret_cast<const char*>(decrypted.data()), size);
+    return QString::fromUtf8(reinterpret_cast<const char*>(decrypted.data()), static_cast<qsizetype>(size));
 }
