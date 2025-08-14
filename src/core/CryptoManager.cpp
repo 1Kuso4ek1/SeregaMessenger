@@ -15,7 +15,7 @@ void CryptoManager::initKeys()
     crypto_kx_keypair(prekey.publicKey.data(), prekey.privateKey.data());
 }
 
-void CryptoManager::initSession(const std::array<uint8_t, crypto_kx_PUBLICKEYBYTES>& peerPublic, bool isServer)
+void CryptoManager::initSession(const std::array<uint8_t, crypto_kx_PUBLICKEYBYTES>& peerPublic, const bool isServer)
 {
     std::array<uint8_t, crypto_kx_SESSIONKEYBYTES> rx, tx;
 
@@ -68,9 +68,9 @@ std::vector<uint8_t> CryptoManager::encrypt(const QString& text) const
     std::array<uint8_t, crypto_aead_xchacha20poly1305_ietf_NPUBBYTES> nonce;
     randombytes_buf(nonce.data(), nonce.size());
 
-    std::vector<uint8_t> encrypted(text.size() + crypto_aead_xchacha20poly1305_ietf_ABYTES);
-
     const auto utf8 = text.toUtf8();
+
+    std::vector<uint8_t> encrypted(utf8.size() + crypto_aead_xchacha20poly1305_ietf_ABYTES);
 
     unsigned long long size;
     crypto_aead_xchacha20poly1305_ietf_encrypt(
