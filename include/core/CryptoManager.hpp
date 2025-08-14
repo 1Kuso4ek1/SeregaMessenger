@@ -10,7 +10,7 @@ public:
     explicit CryptoManager(QObject* parent = nullptr);
 
     void initKeys();
-    void initSession(const std::array<uint8_t, crypto_kx_PUBLICKEYBYTES>& peerPublic);
+    void initSession(const std::array<uint8_t, crypto_kx_PUBLICKEYBYTES>& peerPublic, bool isServer);
 
     void save();
     void load();
@@ -18,8 +18,8 @@ public:
     std::array<uint8_t, crypto_kx_PUBLICKEYBYTES> getPublicKey() const;
     std::array<uint8_t, crypto_kx_PUBLICKEYBYTES> getPublicPreKey() const;
 
-    std::vector<uint8_t> encrypt(const QString& text);
-    QString decrypt(const std::vector<uint8_t>& data);
+    std::vector<uint8_t> encrypt(const QString& text) const;
+    QString decrypt(const std::vector<uint8_t>& data) const;
 
 private:
     struct KeyPair
@@ -30,5 +30,5 @@ private:
 
     KeyPair identity{}, prekey{};
 
-    std::array<uint8_t, crypto_aead_xchacha20poly1305_ietf_KEYBYTES> sessionKey{};
+    std::array<uint8_t, crypto_aead_xchacha20poly1305_ietf_KEYBYTES> sessionKeyRx{}, sessionKeyTx{};
 };
