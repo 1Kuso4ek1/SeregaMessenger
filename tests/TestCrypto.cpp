@@ -8,7 +8,14 @@
 
 TEST_CASE("Basic encryption and decryption")
 {
-    CryptoManager a, b;
+    int argc{};
+    QCoreApplication app(argc, nullptr);
+
+    CryptoStorage storage;
+    storage.saveIdentityKeyPair({}, {});
+    storage.savePreKeyPair({}, {});
+
+    CryptoManager a(storage), b(storage);
 
     a.initKeys();
     b.initKeys();
@@ -29,8 +36,8 @@ TEST_CASE("Basic encryption and decryption")
 TEST_CASE("Crypto storage test")
 {
     int argc{};
-
     QCoreApplication app(argc, nullptr);
+
     CryptoStorage storage;
 
     storage.saveIdentityKeyPair({ 1, 2, 3, 4 }, { 2, 3, 4, 5 });
