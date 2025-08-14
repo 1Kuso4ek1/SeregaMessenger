@@ -1,9 +1,13 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+#include "core/SeregaApp.hpp"
+
 int main(int argc, char* argv[])
 {
     const QGuiApplication app(argc, argv);
+
+    qmlRegisterSingletonType<SeregaApp>("SeregaApp", 1, 0, "SeregaApp", SeregaApp::instance);
 
     QQmlApplicationEngine engine;
     QObject::connect(

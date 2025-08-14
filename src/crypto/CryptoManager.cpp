@@ -2,8 +2,8 @@
 
 #include <QDebug>
 
-CryptoManager::CryptoManager(QObject* parent)
-    : QObject(parent)
+CryptoManager::CryptoManager(CryptoStorage& storage, QObject* parent)
+    : QObject(parent), storage(storage)
 {
     if(sodium_init() < 0)
         qFatal() << "Failed to initialize crypto";
@@ -40,14 +40,16 @@ void CryptoManager::initSession(const std::array<uint8_t, crypto_kx_PUBLICKEYBYT
     sessionKeyTx = std::move(tx);
 }
 
-void CryptoManager::save()
+void CryptoManager::save() const
 {
-    // TODO
+    storage.saveIdentityKeyPair(identity.publicKey, identity.privateKey);
+    storage.savePreKeyPair(prekey.publicKey, prekey.privateKey);
 }
 
-void CryptoManager::load()
+bool CryptoManager::load()
 {
-    // TODO
+    return storage.loadIdentityKeyPair(identity.publicKey, identity.privateKey)
+        && storage.loadPreKeyPair(prekey.publicKey, prekey.privateKey);
 }
 
 std::array<uint8_t, 32> CryptoManager::getPublicKey() const

@@ -2,6 +2,7 @@
 #include <QQmlEngine>
 
 #include "crypto/CryptoManager.hpp"
+#include "storage/CryptoStorage.hpp"
 
 class SeregaApp final : public QObject
 {
@@ -9,10 +10,11 @@ class SeregaApp final : public QObject
     QML_ELEMENT
     QML_SINGLETON
 public:
-    explicit SeregaApp(QObject *parent = nullptr) : QObject(parent) {}
+    explicit SeregaApp(QObject *parent = nullptr);
 
     static SeregaApp* instance(QQmlEngine*, QJSEngine*) { return new SeregaApp; }
 
 private:
-    CryptoManager crypto{};
+    CryptoStorage cryptoStorage;
+    CryptoManager crypto;
 };
