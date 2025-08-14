@@ -1,3 +1,6 @@
 [submodule "libraries/libsodium"]
 	path = libraries/libsodium
 	url = https://github.com/robinlinden/libsodium-cmake.git
+[submodule "libraries/Catch2"]
+	path = libraries/Catch2
+	url = https://github.com/catchorg/Catch2.git

@@ -7,14 +7,19 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(BUILD_TESTS "Build tests" ON)
+
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 
 qt_standard_project_setup(REQUIRES 6.9.1)
 
+qt_add_library(SeregaLib
+    include/core/CryptoManager.hpp
+    src/core/CryptoManager.cpp
+)
+
 qt_add_executable(Serega
     src/main.cpp
-    src/core/CryptoManager.cpp
-    include/core/CryptoManager.hpp
 )
 
 qt_add_qml_module(Serega
@@ -37,13 +42,20 @@ set_target_properties(Serega PROPERTIES
 
 set(SODIUM_DISABLE_TESTS ON)
 add_subdirectory(libraries/libsodium)
+add_subdirectory(libraries/Catch2)
 
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
+
+target_link_libraries(SeregaLib
+    PRIVATE Qt6::Core sodium
+)
 target_link_libraries(Serega
-    PRIVATE Qt6::Quick sodium
+    PRIVATE Qt6::Quick SeregaLib
 )
-target_include_directories(Serega
-    PRIVATE include
-)
+
+include_directories(include)
 
 include(GNUInstallDirs)
 install(TARGETS Serega
