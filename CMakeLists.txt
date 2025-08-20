@@ -57,6 +57,7 @@ add_subdirectory(libraries/Catch2)
 message(INFO ${QTKEYCHAIN_TARGET_NAME})
 
 if(BUILD_TESTS)
+    enable_testing()
     add_subdirectory(tests)
 endif()
 

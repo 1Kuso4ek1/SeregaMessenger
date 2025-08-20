@@ -1,5 +1,3 @@
-enable_testing()
-
 qt_add_executable(tests
     TestCrypto.cpp
 )
@@ -14,4 +12,5 @@ target_include_directories(tests
 
 include(CTest)
 include(Catch)
+
 catch_discover_tests(tests)
