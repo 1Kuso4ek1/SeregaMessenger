@@ -12,26 +12,18 @@ CryptoManager::CryptoManager(CryptoStorage& storage, QObject* parent)
 void CryptoManager::initKeys()
 {
     crypto_kx_keypair(identity.publicKey.data(), identity.privateKey.data());
-    crypto_kx_keypair(prekey.publicKey.data(), prekey.privateKey.data());
+    crypto_kx_keypair(preKey.publicKey.data(), preKey.privateKey.data());
 }
 
-void CryptoManager::initSession(const std::array<uint8_t, crypto_kx_PUBLICKEYBYTES>& peerPublic, const bool isServer)
+void CryptoManager::initServerSession(const Key& peerIdentity)
 {
     std::array<uint8_t, crypto_kx_SESSIONKEYBYTES> rx{}, tx{};
 
-    int ret{};
-    if(isServer)
-        ret = crypto_kx_server_session_keys(
-            rx.data(), tx.data(),
-            identity.publicKey.data(), identity.privateKey.data(),
-            peerPublic.data()
-        );
-    else
-        ret = crypto_kx_client_session_keys(
-            rx.data(), tx.data(),
-            identity.publicKey.data(), identity.privateKey.data(),
-            peerPublic.data()
-        );
+    const int ret = crypto_kx_server_session_keys(
+        rx.data(), tx.data(),
+        preKey.publicKey.data(), preKey.privateKey.data(),
+        peerIdentity.data()
+    );
 
     if(ret != 0)
         qCritical() << "Failed to initialize session keys";
@@ -40,26 +32,49 @@ void CryptoManager::initSession(const std::array<uint8_t, crypto_kx_PUBLICKEYBYT
     sessionKeyTx = tx;
 }
 
+void CryptoManager::initClientSession(const Key& peerIdentity, const Key& peerPreKey)
+{
+    std::array<uint8_t, crypto_kx_SESSIONKEYBYTES> rx{}, tx{};
+
+    const int ret = crypto_kx_client_session_keys(
+        rx.data(), tx.data(),
+        identity.publicKey.data(), identity.privateKey.data(),
+        peerPreKey.data()
+    );
+
+    if(ret != 0)
+        qCritical() << "Failed to initialize session keys";
+
+    sessionKeyRx = rx;
+    sessionKeyTx = tx;
+
+    // Will be improved with fingerprint saving and verification
+    std::array<uint8_t, crypto_hash_sha256_BYTES> fingerprint{};
+    crypto_hash_sha256(fingerprint.data(), peerIdentity.data(), peerIdentity.size());
+
+    qDebug() << "Peer identity fingerprint:" << QByteArray(reinterpret_cast<const char*>(fingerprint.data()), fingerprint.size()).toHex();
+}
+
 void CryptoManager::save() const
 {
     storage.saveIdentityKeyPair(identity.publicKey, identity.privateKey);
-    storage.savePreKeyPair(prekey.publicKey, prekey.privateKey);
+    storage.savePreKeyPair(preKey.publicKey, preKey.privateKey);
 }
 
 bool CryptoManager::load()
 {
     return storage.loadIdentityKeyPair(identity.publicKey, identity.privateKey)
-        && storage.loadPreKeyPair(prekey.publicKey, prekey.privateKey);
+        && storage.loadPreKeyPair(preKey.publicKey, preKey.privateKey);
 }
 
-std::array<uint8_t, 32> CryptoManager::getPublicKey() const
+Key CryptoManager::getPublicKey() const
 {
     return identity.publicKey;
 }
 
-std::array<uint8_t, 32> CryptoManager::getPublicPreKey() const
+Key CryptoManager::getPublicPreKey() const
 {
-    return prekey.publicKey;
+    return preKey.publicKey;
 }
 
 std::vector<uint8_t> CryptoManager::encrypt(const QString& text) const

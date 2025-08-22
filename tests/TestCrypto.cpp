@@ -6,33 +6,6 @@
 #include "crypto/CryptoManager.hpp"
 #include "storage/CryptoStorage.hpp"
 
-TEST_CASE("Basic encryption and decryption")
-{
-    int argc{};
-    QCoreApplication app(argc, nullptr);
-
-    CryptoStorage storage;
-    storage.saveIdentityKeyPair({}, {});
-    storage.savePreKeyPair({}, {});
-
-    CryptoManager a(storage), b(storage);
-
-    a.initKeys();
-    b.initKeys();
-
-    a.initSession(b.getPublicKey(), true);
-    b.initSession(a.getPublicKey(), false);
-
-    const QString message = "Hello world!";
-
-    const auto encrypted = a.encrypt(message);
-    const auto decrypted = b.decrypt(encrypted);
-
-    qDebug() << "Message: " << message << "\nDecrypted: " << decrypted;
-
-    REQUIRE(message == decrypted);
-}
-
 TEST_CASE("Crypto storage test")
 {
     int argc{};
@@ -52,4 +25,36 @@ TEST_CASE("Crypto storage test")
     REQUIRE(identityPriv[0] == 2);
     REQUIRE(preKeyPub[0] == 4);
     REQUIRE(preKeyPriv[0] == 5);
+}
+
+TEST_CASE("Encryption using preKey")
+{
+    int argc{};
+    QCoreApplication app(argc, nullptr);
+
+    CryptoStorage storageA;
+    CryptoStorage storageB;
+
+    storageA.saveIdentityKeyPair({}, {});
+    storageA.savePreKeyPair({}, {});
+    storageB.saveIdentityKeyPair({}, {});
+    storageB.savePreKeyPair({}, {});
+
+    CryptoManager a(storageA);
+    CryptoManager b(storageB);
+
+    a.initKeys();
+    b.initKeys();
+
+    a.initClientSession(b.getPublicKey(), b.getPublicPreKey());
+    b.initServerSession(a.getPublicKey());
+
+    const QString message = "Hello with preKey!";
+    const auto encrypted = a.encrypt(message);
+
+    const auto decrypted = b.decrypt(encrypted);
+
+    qDebug() << "Message: " << message << "\nDecrypted: " << decrypted;
+
+    REQUIRE(message == decrypted);
 }
