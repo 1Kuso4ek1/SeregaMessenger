@@ -23,6 +23,12 @@ qt_add_library(SeregaLib
     src/core/SeregaApp.cpp
     src/crypto/CryptoManager.cpp
     src/storage/CryptoStorage.cpp
+    src/api/Api.cpp
+    include/api/Api.hpp
+    src/api/AuthApi.cpp
+    include/api/AuthApi.hpp
+    src/utils/RequestHandler.cpp
+    include/utils/RequestHandler.hpp
 )
 
 qt_add_executable(Serega
