@@ -15,6 +15,8 @@ public:
 
     bool loadIdentityKeyPair(Key& pub, Key& priv);
     bool loadPreKeyPair(Key& pub, Key& priv);
+    bool loadPublicIdentityKeyBase64(QString& key);
+    bool loadPublicPreKeyBase64(QString& key);
     bool loadJwtPair(QString& access, QString& refresh);
 
 private:

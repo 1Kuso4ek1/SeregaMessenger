@@ -36,6 +36,16 @@ bool SecureStorage::loadPreKeyPair(Key& pub, Key& priv)
         && readSecret("preKeyPriv", priv);
 }
 
+bool SecureStorage::loadPublicIdentityKeyBase64(QString& key)
+{
+    return readSecret("identityPub", key);
+}
+
+bool SecureStorage::loadPublicPreKeyBase64(QString& key)
+{
+    return readSecret("preKeyPub", key);
+}
+
 bool SecureStorage::loadJwtPair(QString& access, QString& refresh)
 {
     return readSecret("access", access)

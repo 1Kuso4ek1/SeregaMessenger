@@ -8,9 +8,6 @@
 
 TEST_CASE("Crypto storage test")
 {
-    int argc{};
-    QCoreApplication app(argc, nullptr);
-
     SecureStorage storage;
 
     storage.saveIdentityKeyPair({ 1, 2, 3, 4 }, { 2, 3, 4, 5 });
@@ -29,9 +26,6 @@ TEST_CASE("Crypto storage test")
 
 TEST_CASE("Encryption using preKey")
 {
-    int argc{};
-    QCoreApplication app(argc, nullptr);
-
     SecureStorage storageA;
     SecureStorage storageB;
 

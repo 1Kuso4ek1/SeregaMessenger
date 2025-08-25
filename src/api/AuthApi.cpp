@@ -1,39 +1,58 @@
 #include "api/AuthApi.hpp"
 
+#include <QDebug>
 #include <QJsonObject>
 
 AuthApi::AuthApi(
+    SecureStorage& secureStorage,
     RequestHandler& requestHandler,
     QNetworkAccessManager& networkManager,
     QNetworkRequestFactory& requestFactory,
     QObject* parent
-) : QObject(parent), requestHandler(requestHandler),
-    networkManager(networkManager), requestFactory(requestFactory)
+) : QObject(parent),
+    secureStorage(secureStorage),
+    requestHandler(requestHandler),
+    networkManager(networkManager),
+    requestFactory(requestFactory)
 {}
 
-void AuthApi::registerUser(
-    const QString& username, const QString& password,
-    const QString& identityKey, const QString& preKey
-)
+void AuthApi::registerUser(const QString& username, const QString& password)
 {
-    const auto req = requestFactory.createRequest("/auth/register");
+    auto req = requestFactory.createRequest("/auth/register");
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QString identityKey, preKey;
+    secureStorage.loadPublicIdentityKeyBase64(identityKey);
+    secureStorage.loadPublicPreKeyBase64(preKey);
 
     const QJsonDocument doc{ QJsonObject{
         { "username", username },
         { "password", password },
-        { "identityKey", identityKey },
-        { "preKey", preKey }
+        { "identity_key", identityKey },
+        { "pre_key", preKey }
     } };
 
     requestHandler.executeRequest(
         networkManager.post(req, doc.toJson()),
         [this](const auto& data)
         {
+            if(data)
+            {
+                const auto json = QJsonDocument::fromJson(*data).object();
+                secureStorage.saveJwtPair(json["access"].toString(), json["refresh"].toString());
 
+                emit userLoggedIn();
+            }
+            else
+            {
+                qCritical() << "Failed to register user";
+
+                emit requestHandler.errorOccurred(data.error());
+            }
         });
 }
 
-void AuthApi::login(const QString& login, const QString& password)
+void AuthApi::login(const QString& username, const QString& password)
 {
 }
 
