@@ -11,11 +11,16 @@ public:
 
     void saveIdentityKeyPair(const Key& pub, const Key& priv);
     void savePreKeyPair(const Key& pub, const Key& priv);
+    void saveJwtPair(const QString& access, const QString& refresh);
 
     bool loadIdentityKeyPair(Key& pub, Key& priv);
     bool loadPreKeyPair(Key& pub, Key& priv);
+    bool loadJwtPair(QString& access, QString& refresh);
 
 private:
     void writeSecret(const QString& type, const Key& key);
+    void writeSecret(const QString& type, const QString& key);
+
     bool readSecret(const QString& type, Key& key);
+    bool readSecret(const QString& type, QString& key);
 };
