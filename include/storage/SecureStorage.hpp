@@ -3,11 +3,11 @@
 
 using Key = std::array<uint8_t, 32>;
 
-class CryptoStorage final : public QObject
+class SecureStorage final : public QObject
 {
     Q_OBJECT
 public:
-    explicit CryptoStorage(QObject* parent = nullptr) : QObject(parent) {}
+    explicit SecureStorage(QObject* parent = nullptr) : QObject(parent) {}
 
     void saveIdentityKeyPair(const Key& pub, const Key& priv);
     void savePreKeyPair(const Key& pub, const Key& priv);

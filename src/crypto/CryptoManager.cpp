@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-CryptoManager::CryptoManager(CryptoStorage& storage, QObject* parent)
+CryptoManager::CryptoManager(SecureStorage& storage, QObject* parent)
     : QObject(parent), storage(storage)
 {
     if(sodium_init() < 0)

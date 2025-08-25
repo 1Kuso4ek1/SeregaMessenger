@@ -1,4 +1,4 @@
-#include "storage/CryptoStorage.hpp"
+#include "storage/SecureStorage.hpp"
 
 #include <QDebug>
 #include <QTimer>
@@ -6,31 +6,31 @@
 #include <sodium.h>
 #include <qtkeychain/keychain.h>
 
-void CryptoStorage::saveIdentityKeyPair(const Key& pub, const Key& priv)
+void SecureStorage::saveIdentityKeyPair(const Key& pub, const Key& priv)
 {
     writeSecret("identityPub", pub);
     writeSecret("identityPriv", priv);
 }
 
-void CryptoStorage::savePreKeyPair(const Key& pub, const Key& priv)
+void SecureStorage::savePreKeyPair(const Key& pub, const Key& priv)
 {
     writeSecret("preKeyPub", pub);
     writeSecret("preKeyPriv", priv);
 }
 
-bool CryptoStorage::loadIdentityKeyPair(Key& pub, Key& priv)
+bool SecureStorage::loadIdentityKeyPair(Key& pub, Key& priv)
 {
     return readSecret("identityPub", pub)
         && readSecret("identityPriv", priv);
 }
 
-bool CryptoStorage::loadPreKeyPair(Key& pub, Key& priv)
+bool SecureStorage::loadPreKeyPair(Key& pub, Key& priv)
 {
     return readSecret("preKeyPub", pub)
         && readSecret("preKeyPriv", priv);
 }
 
-void CryptoStorage::writeSecret(const QString& type, const Key& key)
+void SecureStorage::writeSecret(const QString& type, const Key& key)
 {
     QEventLoop loop;
 
@@ -55,7 +55,7 @@ void CryptoStorage::writeSecret(const QString& type, const Key& key)
     loop.exec();
 }
 
-bool CryptoStorage::readSecret(const QString& type, Key& key)
+bool SecureStorage::readSecret(const QString& type, Key& key)
 {
     QEventLoop loop;
 

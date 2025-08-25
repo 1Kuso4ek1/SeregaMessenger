@@ -1,13 +1,13 @@
 #pragma once
 #include <sodium.h>
 
-#include "storage/CryptoStorage.hpp"
+#include "storage/SecureStorage.hpp"
 
 class CryptoManager final : public QObject
 {
     Q_OBJECT
 public:
-    explicit CryptoManager(CryptoStorage& storage, QObject* parent = nullptr);
+    explicit CryptoManager(SecureStorage& storage, QObject* parent = nullptr);
 
     void initKeys();
     void initServerSession(const Key& peerIdentity);
@@ -23,7 +23,7 @@ public:
     QString decrypt(const std::vector<uint8_t>& data) const;
 
 private:
-    CryptoStorage& storage;
+    SecureStorage& storage;
 
 private:
     struct KeyPair { Key publicKey, privateKey; };

@@ -4,14 +4,14 @@
 #include <QDebug>
 
 #include "crypto/CryptoManager.hpp"
-#include "storage/CryptoStorage.hpp"
+#include "storage/SecureStorage.hpp"
 
 TEST_CASE("Crypto storage test")
 {
     int argc{};
     QCoreApplication app(argc, nullptr);
 
-    CryptoStorage storage;
+    SecureStorage storage;
 
     storage.saveIdentityKeyPair({ 1, 2, 3, 4 }, { 2, 3, 4, 5 });
     storage.savePreKeyPair({ 4, 3, 2, 1 }, { 5, 4, 3, 2 });
@@ -32,8 +32,8 @@ TEST_CASE("Encryption using preKey")
     int argc{};
     QCoreApplication app(argc, nullptr);
 
-    CryptoStorage storageA;
-    CryptoStorage storageB;
+    SecureStorage storageA;
+    SecureStorage storageB;
 
     storageA.saveIdentityKeyPair({}, {});
     storageA.savePreKeyPair({}, {});

@@ -5,7 +5,7 @@
 #include <QDebug>
 
 #include "crypto/CryptoManager.hpp"
-#include "storage/CryptoStorage.hpp"
+#include "storage/SecureStorage.hpp"
 
 TEST_CASE("User registration")
 {

@@ -15,20 +15,27 @@ find_package(Qt6 REQUIRED COMPONENTS Quick)
 
 qt_standard_project_setup(REQUIRES 6.9.1)
 
-qt_add_library(SeregaLib
+set(SEREGA_HEADERS
     include/core/SeregaApp.hpp
     include/crypto/CryptoManager.hpp
-    include/storage/CryptoStorage.hpp
+    include/storage/SecureStorage.hpp
+    include/api/Api.hpp
+    include/api/AuthApi.hpp
+    include/utils/RequestHandler.hpp
+)
 
+set(SEREGA_SOURCES
     src/core/SeregaApp.cpp
     src/crypto/CryptoManager.cpp
-    src/storage/CryptoStorage.cpp
+    src/storage/SecureStorage.cpp
     src/api/Api.cpp
-    include/api/Api.hpp
     src/api/AuthApi.cpp
-    include/api/AuthApi.hpp
     src/utils/RequestHandler.cpp
-    include/utils/RequestHandler.hpp
+)
+
+qt_add_library(SeregaLib
+    ${SEREGA_HEADERS}
+    ${SEREGA_SOURCES}
 )
 
 qt_add_executable(Serega
