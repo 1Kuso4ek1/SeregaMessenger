@@ -5,8 +5,6 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequestFactory>
 
-
-// TODO: Add a reference to the global SecureStorage inside the AuthApi class
 class AuthApi final : public QObject
 {
     Q_OBJECT

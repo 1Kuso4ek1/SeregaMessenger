@@ -1,18 +1,22 @@
 #pragma once
-#include <QNetworkAccessManager>
-#include <QNetworkRequestFactory>
-#include <qqmlintegration.h>
+#include "api/AuthApi.hpp"
 
 // Will expose different parts of the API through properties
 class Api final : public QObject
 {
     Q_OBJECT
-    QML_ELEMENT
-    QML_SINGLETON
 public:
-    explicit Api(QObject* parent = nullptr) : QObject(parent) {}
+    explicit Api(SecureStorage& secureStorage, QObject* parent = nullptr);
 
-private:
+private: // Shared with SeregaApp
+    SecureStorage& secureStorage;
+
+private: // All the API parts
+    AuthApi authApi;
+
+private: // Shared with API parts
+    RequestHandler requestHandler;
+
     QNetworkAccessManager networkManager;
     QNetworkRequestFactory requestFactory;
 };

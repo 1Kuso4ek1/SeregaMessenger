@@ -2,8 +2,8 @@
 
 SeregaApp::SeregaApp(QObject* parent)
     : QObject(parent),
-      cryptoStorage(this),
-      crypto(cryptoStorage, this)
+      storage(this),
+      crypto(storage, this)
 {
     if(!crypto.load())
     {
