@@ -26,6 +26,9 @@ signals:
     void userLoggedIn();
 
 private:
+    void callJwtEndpoint(const QString& endpoint, const QJsonDocument& doc);
+
+private:
     SecureStorage& secureStorage;
     RequestHandler& requestHandler;
 
