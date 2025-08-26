@@ -25,8 +25,6 @@ TEST_CASE("User registration")
     networkRequestFactory.setBaseUrl({ "http://localhost:8080" });
 
     AuthApi auth(storage, requestHandler, networkAccessManager, networkRequestFactory);
-    // Every user is unique
-    auth.registerUser(QUuid::createUuid().toString(), "qtTestUserPassword");
 
     bool loggedIn{};
 
@@ -43,7 +41,68 @@ TEST_CASE("User registration")
         QTimer::singleShot(0, &loop, &QEventLoop::quit);
     });
 
+    auth.registerUser(QUuid::createUuid().toString(), "qtTestUserPassword");
+
     loop.exec();
 
+    QString access, refresh;
+    storage.loadJwtPair(access, refresh);
+
     REQUIRE(loggedIn);
+    REQUIRE(!access.isEmpty());
+    REQUIRE(!refresh.isEmpty());
+}
+
+TEST_CASE("User login")
+{
+    QEventLoop loop;
+
+    SecureStorage storage;
+    storage.saveJwtPair({}, {});
+
+    RequestHandler requestHandler;
+    QNetworkAccessManager networkAccessManager;
+    QNetworkRequestFactory networkRequestFactory;
+    networkRequestFactory.setBaseUrl({ "http://localhost:8080" });
+
+    AuthApi auth(storage, requestHandler, networkAccessManager, networkRequestFactory);
+
+    QObject::connect(&auth, &AuthApi::userLoggedIn, [&]
+        { QTimer::singleShot(0, &loop, &QEventLoop::quit); });
+
+    QObject::connect(&requestHandler, &RequestHandler::errorOccurred, [&]
+        { QTimer::singleShot(0, &loop, &QEventLoop::quit); });
+
+    auth.registerUser("testUser", "qtTestUserPassword");
+
+    loop.exec();
+
+    bool loggedIn{};
+
+    QObject::disconnect(&auth, &AuthApi::userLoggedIn, nullptr, nullptr);
+    QObject::disconnect(&requestHandler, &RequestHandler::errorOccurred, nullptr, nullptr);
+
+    QObject::connect(&auth, &AuthApi::userLoggedIn, [&]
+    {
+        qDebug() << "User logged in";
+        loggedIn = true;
+        QTimer::singleShot(0, &loop, &QEventLoop::quit);
+    });
+
+    QObject::connect(&requestHandler, &RequestHandler::errorOccurred, [&]
+    {
+        qDebug() << "Error occurred on login";
+        QTimer::singleShot(0, &loop, &QEventLoop::quit);
+    });
+
+    auth.login("testUser", "qtTestUserPassword");
+
+    loop.exec();
+
+    QString access, refresh;
+    storage.loadJwtPair(access, refresh);
+
+    REQUIRE(loggedIn);
+    REQUIRE(!access.isEmpty());
+    REQUIRE(!refresh.isEmpty());
 }

@@ -39,7 +39,7 @@ void AuthApi::registerUser(const QString& username, const QString& password)
             if(data)
             {
                 const auto json = QJsonDocument::fromJson(*data).object();
-                secureStorage.saveJwtPair(json["access"].toString(), json["refresh"].toString());
+                secureStorage.saveJwtPair(json["access_token"].toString(), json["refresh_token"].toString());
 
                 emit userLoggedIn();
             }
@@ -54,6 +54,32 @@ void AuthApi::registerUser(const QString& username, const QString& password)
 
 void AuthApi::login(const QString& username, const QString& password)
 {
+    auto req = requestFactory.createRequest("/auth/login");
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    const QJsonDocument doc{ QJsonObject{
+        { "username", username },
+        { "password", password }
+    } };
+
+    requestHandler.executeRequest(
+        networkManager.post(req, doc.toJson()),
+        [this](const auto& data)
+        {
+            if(data)
+            {
+                const auto json = QJsonDocument::fromJson(*data).object();
+                secureStorage.saveJwtPair(json["access_token"].toString(), json["refresh_token"].toString());
+
+                emit userLoggedIn();
+            }
+            else
+            {
+                qCritical() << "Failed to login";
+
+                emit requestHandler.errorOccurred(data.error());
+            }
+        });
 }
 
 void AuthApi::refresh()

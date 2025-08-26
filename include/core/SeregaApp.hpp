@@ -17,7 +17,7 @@ public:
     static SeregaApp* instance(QQmlEngine*, QJSEngine*) { return new SeregaApp; }
 
 private:
-    SecureStorage storage;
+    SecureStorage secureStorage;
     CryptoManager crypto;
 
     Api api;
