@@ -1,6 +1,6 @@
 qt_add_executable(tests
     TestCrypto.cpp
-    TestApi.cpp
+    TestAuthApi.cpp
     main.cpp
 )
 
