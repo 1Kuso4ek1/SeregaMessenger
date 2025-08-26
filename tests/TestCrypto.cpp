@@ -6,7 +6,7 @@
 #include "crypto/CryptoManager.hpp"
 #include "storage/SecureStorage.hpp"
 
-TEST_CASE("Crypto storage test")
+TEST_CASE("Crypto storage test", "[crypto]")
 {
     SecureStorage storage;
 
@@ -24,7 +24,7 @@ TEST_CASE("Crypto storage test")
     REQUIRE(preKeyPriv[0] == 5);
 }
 
-TEST_CASE("Encryption using preKey")
+TEST_CASE("Encryption using preKey", "[crypto]")
 {
     SecureStorage storageA;
     SecureStorage storageB;

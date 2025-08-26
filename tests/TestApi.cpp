@@ -10,7 +10,7 @@
 
 #include "api/AuthApi.hpp"
 
-TEST_CASE("User registration")
+TEST_CASE("User registration", "[api][auth]")
 {
     QEventLoop loop;
 
@@ -53,7 +53,7 @@ TEST_CASE("User registration")
     REQUIRE(!refresh.isEmpty());
 }
 
-TEST_CASE("User login")
+TEST_CASE("User login", "[api][auth]")
 {
     QEventLoop loop;
 
