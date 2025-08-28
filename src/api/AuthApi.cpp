@@ -44,8 +44,8 @@ void AuthApi::login(const QString& username, const QString& password)
 
 void AuthApi::refresh()
 {
-    QString access, refresh;
-    secureStorage.loadJwtPair(access, refresh);
+    QString refresh;
+    secureStorage.loadJwtRefresh(refresh);
 
     const QJsonDocument doc{ QJsonObject{
         { "refresh_token", refresh }

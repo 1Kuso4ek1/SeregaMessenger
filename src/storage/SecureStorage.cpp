@@ -46,10 +46,14 @@ bool SecureStorage::loadPublicPreKeyBase64(QString& key)
     return readSecret("preKeyPub", key);
 }
 
-bool SecureStorage::loadJwtPair(QString& access, QString& refresh)
+bool SecureStorage::loadJwtAccess(QString& access)
 {
-    return readSecret("access", access)
-        && readSecret("refresh", refresh);
+    return readSecret("access", access);
+}
+
+bool SecureStorage::loadJwtRefresh(QString& refresh)
+{
+    return readSecret("refresh", refresh);
 }
 
 void SecureStorage::writeSecret(const QString& type, const QString& key)

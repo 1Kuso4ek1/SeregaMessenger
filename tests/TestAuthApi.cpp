@@ -46,7 +46,8 @@ TEST_CASE("User registration", "[api][auth]")
     loop.exec();
 
     QString access, refresh;
-    storage.loadJwtPair(access, refresh);
+    storage.loadJwtAccess(access);
+    storage.loadJwtRefresh(refresh);
 
     REQUIRE(loggedIn);
     REQUIRE(!access.isEmpty());
@@ -102,7 +103,8 @@ TEST_CASE("User login", "[api][auth]")
     loop.exec();
 
     QString access, refresh;
-    storage.loadJwtPair(access, refresh);
+    storage.loadJwtAccess(access);
+    storage.loadJwtRefresh(refresh);
 
     REQUIRE(loggedIn);
     REQUIRE(!access.isEmpty());
@@ -164,7 +166,8 @@ TEST_CASE("Token refresh", "[api][auth]")
     loop.exec();
 
     QString newAccess, newRefresh;
-    storage.loadJwtPair(newAccess, newRefresh);
+    storage.loadJwtAccess(newAccess);
+    storage.loadJwtRefresh(newRefresh);
 
     REQUIRE(refreshed);
     REQUIRE(!newAccess.isEmpty());

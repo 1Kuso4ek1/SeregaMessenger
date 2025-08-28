@@ -12,16 +12,22 @@ TEST_CASE("Crypto storage test", "[crypto]")
 
     storage.saveIdentityKeyPair({ 1, 2, 3, 4 }, { 2, 3, 4, 5 });
     storage.savePreKeyPair({ 4, 3, 2, 1 }, { 5, 4, 3, 2 });
+    storage.saveJwtPair("accessToken", "refreshToken");
 
     Key identityPub, identityPriv, preKeyPub, preKeyPriv;
+    QString access, refresh;
 
     REQUIRE(storage.loadIdentityKeyPair(identityPub, identityPriv));
     REQUIRE(storage.loadPreKeyPair(preKeyPub, preKeyPriv));
+    REQUIRE(storage.loadJwtAccess(access));
+    REQUIRE(storage.loadJwtRefresh(refresh));
 
     REQUIRE(identityPub[0] == 1);
     REQUIRE(identityPriv[0] == 2);
     REQUIRE(preKeyPub[0] == 4);
     REQUIRE(preKeyPriv[0] == 5);
+    REQUIRE(access == "accessToken");
+    REQUIRE(refresh == "refreshToken");
 }
 
 TEST_CASE("Encryption using preKey", "[crypto]")

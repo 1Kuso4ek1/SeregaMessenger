@@ -17,7 +17,8 @@ public:
     bool loadPreKeyPair(Key& pub, Key& priv);
     bool loadPublicIdentityKeyBase64(QString& key);
     bool loadPublicPreKeyBase64(QString& key);
-    bool loadJwtPair(QString& access, QString& refresh);
+    bool loadJwtAccess(QString& access);
+    bool loadJwtRefresh(QString& refresh);
 
 private:
     void writeSecret(const QString& type, const Key& key);
@@ -25,4 +26,7 @@ private:
 
     bool readSecret(const QString& type, Key& key);
     bool readSecret(const QString& type, QString& key);
+
+// Including some type of caching is up for debate...
+// It will both improve the performance and introduce a new potential vulnerability
 };
