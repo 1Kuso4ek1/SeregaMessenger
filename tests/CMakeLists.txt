@@ -2,6 +2,7 @@ qt_add_executable(tests
     TestCrypto.cpp
     TestAuthApi.cpp
     main.cpp
+    TestUsersApi.cpp
 )
 
 target_link_libraries(tests
