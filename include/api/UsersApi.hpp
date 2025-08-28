@@ -25,7 +25,7 @@ signals:
     void userFetched(const QVariantMap& profile);
 
 private:
-    void fetchUser(QNetworkRequest* request);
+    void fetchUser(const QString& endpoint);
 
 private:
     SecureStorage& secureStorage;
