@@ -5,11 +5,11 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequestFactory>
 
-class AuthApi final : public QObject
+class UsersApi final : public QObject
 {
     Q_OBJECT
 public:
-    AuthApi(
+    UsersApi(
         SecureStorage& secureStorage,
         RequestHandler& requestHandler,
         QNetworkAccessManager& networkManager,
@@ -17,16 +17,15 @@ public:
         QObject* parent = nullptr
     );
 
-    Q_INVOKABLE void registerUser(const QString& username, const QString& password);
-    Q_INVOKABLE void login(const QString& username, const QString& password);
-
-    void refresh();
+    Q_INVOKABLE void getUserById(int id);
+    Q_INVOKABLE void getUserByUsername(const QString& username);
+    Q_INVOKABLE void getMe();
 
 signals:
-    void userLoggedIn();
+    void userFetched(const QVariantMap& profile);
 
 private:
-    void callJwtEndpoint(const QString& endpoint, const QJsonDocument& doc);
+    void fetchUser(QNetworkRequest* request);
 
 private:
     SecureStorage& secureStorage;

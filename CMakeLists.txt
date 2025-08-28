@@ -21,6 +21,7 @@ set(SEREGA_HEADERS
     include/storage/SecureStorage.hpp
     include/api/Api.hpp
     include/api/AuthApi.hpp
+    include/api/UsersApi.hpp
     include/utils/RequestHandler.hpp
 )
 
@@ -30,6 +31,7 @@ set(SEREGA_SOURCES
     src/storage/SecureStorage.cpp
     src/api/Api.cpp
     src/api/AuthApi.cpp
+    src/api/UsersApi.cpp
     src/utils/RequestHandler.cpp
 )
 
