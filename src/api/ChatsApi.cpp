@@ -50,7 +50,7 @@ void ChatsApi::sendMessage(const int chatId, const QString& message)
         });
 }
 
-void ChatsApi::fetchMessages(const int chatId, const int limit, const int offset)
+void ChatsApi::getMessages(const int chatId, const int limit, const int offset)
 {
     QString access;
     secureStorage.loadJwtAccess(access);

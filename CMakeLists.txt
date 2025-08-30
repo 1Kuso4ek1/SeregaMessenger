@@ -24,6 +24,7 @@ set(SEREGA_HEADERS
     include/api/ChatsApi.hpp
     include/api/UsersApi.hpp
     include/utils/RequestHandler.hpp
+    include/api/UpdatesApi.hpp
 )
 
 set(SEREGA_SOURCES
@@ -35,6 +36,7 @@ set(SEREGA_SOURCES
     src/api/ChatsApi.cpp
     src/api/UsersApi.cpp
     src/utils/RequestHandler.cpp
+    src/api/UpdatesApi.cpp
 )
 
 qt_add_library(SeregaLib

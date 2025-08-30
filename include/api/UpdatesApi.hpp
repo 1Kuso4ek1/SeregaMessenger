@@ -5,11 +5,11 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequestFactory>
 
-class ChatsApi final : public QObject
+class UpdatesApi final : public QObject
 {
     Q_OBJECT
 public:
-    ChatsApi(
+    UpdatesApi(
         SecureStorage& secureStorage,
         RequestHandler& requestHandler,
         QNetworkAccessManager& networkManager,
@@ -17,12 +17,10 @@ public:
         QObject* parent = nullptr
     );
 
-    Q_INVOKABLE void sendMessage(int chatId, const QString& message);
-    Q_INVOKABLE void getMessages(int chatId, int limit = 50, int offset = 0);
+    void getUpdates(int limit = 50, int offset = 0);
 
 signals:
-    void messageSent(uint64_t messageId);
-    void messagesFetched(const QVariantList& messages);
+    void updatesFetched(const QVariantList& updates);
 
 private:
     SecureStorage& secureStorage;

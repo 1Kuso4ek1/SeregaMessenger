@@ -10,10 +10,11 @@
 
 #include "api/AuthApi.hpp"
 #include "api/ChatsApi.hpp"
+#include "api/UpdatesApi.hpp"
 
-TEST_CASE("Message sending and fetching", "[api][chats]")
+TEST_CASE("Updates fetch test", "[api][updates]")
 {
-    QEventLoop loop;
+    QEventLoop loop, updatesLoop;
 
     SecureStorage storage;
     storage.saveIdentityKeyPair({ 1, 2, 3, 4 }, { 2, 3, 4, 5 });
@@ -27,6 +28,7 @@ TEST_CASE("Message sending and fetching", "[api][chats]")
 
     AuthApi auth(storage, requestHandler, networkAccessManager, networkRequestFactory);
     ChatsApi chats(storage, requestHandler, networkAccessManager, networkRequestFactory);
+    UpdatesApi updates(storage, requestHandler, networkAccessManager, networkRequestFactory);
 
     QObject::connect(&auth, &AuthApi::userLoggedIn, [&]
     {
@@ -37,35 +39,33 @@ TEST_CASE("Message sending and fetching", "[api][chats]")
     {
         qDebug() << "Error occurred: " << error;
         QTimer::singleShot(0, &loop, &QEventLoop::quit);
+        QTimer::singleShot(0, &updatesLoop, &QEventLoop::quit);
     });
 
     auth.registerUser(QUuid::createUuid().toString(), "qtTestUserPassword");
-
     loop.exec();
 
-    bool messageSent{}, messagesFetched{};
     QObject::connect(&chats, &ChatsApi::messageSent, [&](const auto messageId)
     {
-        messageSent = true;
         qDebug() << "Message sent: " << messageId;
         QTimer::singleShot(0, &loop, &QEventLoop::quit);
     });
 
-    QObject::connect(&chats, &ChatsApi::messagesFetched, [&](const QVariantList& messages)
+    bool updatesFetched{};
+    QObject::connect(&updates, &UpdatesApi::updatesFetched, [&](const QVariantList& newUpdates)
     {
-        messagesFetched = true;
-        qDebug() << "Messages fetched: " << messages;
-        QTimer::singleShot(0, &loop, &QEventLoop::quit);
+        updatesFetched = true;
+        qDebug() << "Messages fetched: " << newUpdates;
+        QTimer::singleShot(0, &updatesLoop, &QEventLoop::quit);
     });
 
-    // We don't really care about encryption
+    // Starting long polling
+    updates.getUpdates();
+
     chats.sendMessage(1, "Test message");
     loop.exec();
 
-    REQUIRE(messageSent);
+    updatesLoop.exec();
 
-    chats.getMessages(1);
-    loop.exec();
-
-    REQUIRE(messagesFetched);
+    REQUIRE(updatesFetched);
 }
