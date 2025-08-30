@@ -46,6 +46,7 @@ void UsersApi::fetchUser(const QString& endpoint)
         {
             if(data)
             {
+                // Remember that user's keys are encoded in base64
                 const auto json = QJsonDocument::fromJson(*data).object();
 
                 emit userFetched(json.toVariantMap());

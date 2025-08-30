@@ -49,6 +49,7 @@ TEST_CASE("User fetching", "[api][users]")
 
     int meId{};
     QString username;
+    QByteArray identityPub, preKeyPub;
 
     QObject::connect(&users, &UsersApi::userFetched, [&](const QVariantMap& user)
     {
@@ -57,6 +58,8 @@ TEST_CASE("User fetching", "[api][users]")
 
         meId = user["id"].toInt();
         username = user["username"].toString();
+        identityPub = QByteArray::fromBase64(user["identity_key"].toString().toLatin1());
+        preKeyPub = QByteArray::fromBase64(user["pre_key"].toString().toLatin1());
 
         QTimer::singleShot(0, &loop, &QEventLoop::quit);
     });
@@ -65,6 +68,8 @@ TEST_CASE("User fetching", "[api][users]")
     loop.exec();
 
     REQUIRE(userFetched);
+    REQUIRE(identityPub[3] == 4);
+    REQUIRE(preKeyPub[3] == 1);
 
     userFetched = false;
 
@@ -72,6 +77,8 @@ TEST_CASE("User fetching", "[api][users]")
     loop.exec();
 
     REQUIRE(userFetched);
+    REQUIRE(identityPub[3] == 4);
+    REQUIRE(preKeyPub[3] == 1);
 
     userFetched = false;
 
@@ -79,4 +86,6 @@ TEST_CASE("User fetching", "[api][users]")
     loop.exec();
 
     REQUIRE(userFetched);
+    REQUIRE(identityPub[3] == 4);
+    REQUIRE(preKeyPub[3] == 1);
 }
