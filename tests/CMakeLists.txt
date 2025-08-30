@@ -3,6 +3,7 @@ qt_add_executable(tests
     TestAuthApi.cpp
     main.cpp
     TestUsersApi.cpp
+    TestChatsApi.cpp
 )
 
 target_link_libraries(tests
