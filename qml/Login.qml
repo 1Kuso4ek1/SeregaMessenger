@@ -14,7 +14,7 @@ Item {
         spacing: 10
 
         Label {
-            text: "Login"
+            text: "Serega"
 
             Layout.fillWidth: true
 
@@ -48,11 +48,11 @@ Item {
                     echoMode: TextInput.Password
                 }
 
-                Button {
+                RoundButton {
                     id: showPasswordButton
                     text: "Show"
 
-                    Layout.preferredWidth: 100
+                    Layout.preferredWidth: 70
 
                     onClicked: {
                         if(password.echoMode === TextInput.Password) {
@@ -79,6 +79,8 @@ Item {
 
                 Layout.preferredWidth: 100
                 Layout.fillWidth: true
+
+                Material.background: Material.accent
             }
 
             Button {
