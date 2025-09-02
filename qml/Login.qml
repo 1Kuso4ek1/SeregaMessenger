@@ -3,7 +3,25 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
+import SeregaApp
+
 Item {
+    Connections {
+        target: SeregaApp.api.requestHandler
+
+        function onErrorOccurred(error) {
+            console.error(error)
+        }
+    }
+
+    Connections {
+        target: SeregaApp.api.auth
+
+        function onUserLoggedIn() {
+            console.log("success")
+        }
+    }
+
     ColumnLayout {
         id: root
 
@@ -81,6 +99,8 @@ Item {
                 Layout.fillWidth: true
 
                 Material.background: Material.accent
+
+                onClicked: SeregaApp.api.auth.login(username.text, password.text)
             }
 
             Button {
@@ -88,6 +108,8 @@ Item {
 
                 Layout.preferredWidth: 100
                 Layout.fillWidth: true
+
+                onClicked: SeregaApp.api.auth.registerUser(username.text, password.text)
             }
         }
     }

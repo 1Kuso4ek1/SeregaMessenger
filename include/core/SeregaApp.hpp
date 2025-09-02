@@ -13,7 +13,13 @@ class SeregaApp final : public QObject
 public:
     explicit SeregaApp(QObject *parent = nullptr);
 
-    // Pointer is being managed externally by Qt
+    Q_PROPERTY(Api* api READ getApi CONSTANT)
+    Api* getApi() { return &api; }
+
+    Q_PROPERTY(CryptoManager* crypto READ getCrypto CONSTANT)
+    CryptoManager* getCrypto() { return &crypto; }
+
+    // Qt is managing a pointer externally
     static SeregaApp* instance(QQmlEngine*, QJSEngine*) { return new SeregaApp; }
 
 private:
