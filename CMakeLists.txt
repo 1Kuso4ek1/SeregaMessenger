@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(BUILD_TESTS "Build tests" ON)
 
 set(BUILD_SHARED_LIBS OFF)
+set(QT_QML_GENERATE_QMLLS_INI ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 
@@ -22,9 +23,9 @@ set(SEREGA_HEADERS
     include/api/Api.hpp
     include/api/AuthApi.hpp
     include/api/ChatsApi.hpp
+    include/api/UpdatesApi.hpp
     include/api/UsersApi.hpp
     include/utils/RequestHandler.hpp
-    include/api/UpdatesApi.hpp
 )
 
 set(SEREGA_SOURCES
@@ -34,9 +35,14 @@ set(SEREGA_SOURCES
     src/api/Api.cpp
     src/api/AuthApi.cpp
     src/api/ChatsApi.cpp
+    src/api/UpdatesApi.cpp
     src/api/UsersApi.cpp
     src/utils/RequestHandler.cpp
-    src/api/UpdatesApi.cpp
+)
+
+set_source_files_properties(qml/Navigation.qml
+    PROPERTIES
+    QT_QML_SINGLETON_TYPE TRUE
 )
 
 qt_add_library(SeregaLib
@@ -52,7 +58,9 @@ qt_add_qml_module(Serega
     URI SeregaMessenger
     VERSION 1.0
     QML_FILES
-    qml/Main.qml
+        qml/Main.qml
+        qml/Navigation.qml
+        qml/Login.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
