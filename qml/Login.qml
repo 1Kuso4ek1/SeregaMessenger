@@ -10,6 +10,7 @@ Item {
         target: SeregaApp.api.requestHandler
 
         function onErrorOccurred(error) {
+            errorLabel.opacity = 1.0
             console.error(error)
         }
     }
@@ -51,6 +52,8 @@ Item {
 
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignCenter
+
+                onTextChanged: errorLabel.opacity = 0.0
             }
 
             RowLayout {
@@ -64,6 +67,7 @@ Item {
                     Layout.alignment: Qt.AlignCenter
 
                     echoMode: TextInput.Password
+                    onTextChanged: errorLabel.opacity = 0.0
                 }
 
                 RoundButton {
@@ -111,6 +115,19 @@ Item {
 
                 onClicked: SeregaApp.api.auth.registerUser(username.text, password.text)
             }
+        }
+
+        Label {
+            id: errorLabel
+            Layout.fillWidth: true
+
+            horizontalAlignment: Text.AlignHCenter
+
+            text: "Failed to log in"
+            color: "red"
+            opacity: 0.0
+
+            Behavior on opacity { NumberAnimation { easing.type: Easing.InOutBack; duration: 1000 } }
         }
     }
 }
