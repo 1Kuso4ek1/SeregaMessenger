@@ -25,6 +25,7 @@ set(SEREGA_HEADERS
     include/api/ChatsApi.hpp
     include/api/UpdatesApi.hpp
     include/api/UsersApi.hpp
+    include/utils/Config.hpp
     include/utils/RequestHandler.hpp
 )
 
@@ -61,6 +62,22 @@ qt_add_qml_module(Serega
         qml/Main.qml
         qml/Navigation.qml
         qml/Login.qml
+)
+
+if(ANDROID)
+    include(libraries/android_openssl/android_openssl.cmake)
+
+    add_android_openssl_libraries(Serega)
+endif()
+
+set(CONFIG_FILE "config/config.json")
+
+qt_add_resources(Serega
+    "config"
+    PREFIX
+        "/"
+    FILES
+        ${CONFIG_FILE}
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

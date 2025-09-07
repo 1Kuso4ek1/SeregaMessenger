@@ -2,9 +2,10 @@
 
 SeregaApp::SeregaApp(QObject* parent)
     : QObject(parent),
+      config(":/config/config.json"),
       secureStorage(this),
       crypto(secureStorage, this),
-      api(secureStorage)
+      api(config, secureStorage)
 {
     if(!crypto.load())
     {

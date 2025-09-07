@@ -7,3 +7,6 @@
 [submodule "libraries/qtkeychain"]
 	path = libraries/qtkeychain
 	url = https://github.com/frankosterfeld/qtkeychain.git
+[submodule "libraries/android_openssl"]
+	path = libraries/android_openssl
+	url = https://github.com/KDAB/android_openssl.git

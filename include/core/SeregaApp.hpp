@@ -4,6 +4,7 @@
 #include "api/Api.hpp"
 #include "crypto/CryptoManager.hpp"
 #include "storage/SecureStorage.hpp"
+#include "utils/Config.hpp"
 
 class SeregaApp final : public QObject
 {
@@ -23,6 +24,8 @@ public:
     static SeregaApp* instance(QQmlEngine*, QJSEngine*) { return new SeregaApp; }
 
 private:
+    Config config;
+
     SecureStorage secureStorage;
     CryptoManager crypto;
 

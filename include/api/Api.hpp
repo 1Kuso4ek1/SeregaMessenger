@@ -4,12 +4,14 @@
 #include "UpdatesApi.hpp"
 #include "UsersApi.hpp"
 
+#include "utils/Config.hpp"
+
 // Will expose different parts of the API through properties
 class Api final : public QObject
 {
     Q_OBJECT
 public:
-    explicit Api(SecureStorage& secureStorage, QObject* parent = nullptr);
+    Api(Config& config, SecureStorage& secureStorage, QObject* parent = nullptr);
 
     Q_PROPERTY(AuthApi* auth READ getAuth CONSTANT)
     AuthApi* getAuth() { return &authApi; }
@@ -27,6 +29,7 @@ public:
     RequestHandler* getRequestHandler() { return &requestHandler; }
 
 private: // Shared with SeregaApp
+    Config& config;
     SecureStorage& secureStorage;
 
 private: // All the API parts
