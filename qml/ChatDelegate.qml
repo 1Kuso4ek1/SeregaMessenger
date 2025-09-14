@@ -7,6 +7,7 @@ import SeregaApp
 
 Pane {
     width: chatsList.width
+    height: 100
 
     Material.background: Material.color(Material.Grey, Material.Shade900)
 
@@ -16,8 +17,6 @@ Pane {
         spacing: 10
 
         Avatar {
-            Layout.alignment: Qt.AlignVCenter
-
             size: 50
         }
 
@@ -53,5 +52,12 @@ Pane {
                 elide: Text.ElideRight
             }
         }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+
+        onClicked: Navigation.push("Chat.qml", {chatName: "Hello"})
+        propagateComposedEvents: true
     }
 }

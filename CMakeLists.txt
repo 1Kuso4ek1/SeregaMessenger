@@ -65,6 +65,7 @@ qt_add_qml_module(Serega
         qml/Chats.qml
         qml/ChatDelegate.qml
         qml/Avatar.qml
+        qml/Chat.qml
 )
 
 if(ANDROID)
