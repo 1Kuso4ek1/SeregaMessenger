@@ -18,7 +18,7 @@ ApplicationWindow {
     StackView {
         id: stackView
         anchors.fill: parent
-        initialItem: Login{}
+        initialItem: Chats{}
 
         Component.onCompleted: Navigation.stackView = stackView
     }

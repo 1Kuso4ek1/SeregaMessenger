@@ -19,6 +19,7 @@ Item {
         target: SeregaApp.api.auth
 
         function onUserLoggedIn() {
+            Navigation.replace("Chats.qml")
             console.log("success")
         }
     }
@@ -103,6 +104,7 @@ Item {
                 Layout.fillWidth: true
 
                 Material.background: Material.accent
+                Material.elevation: 6
 
                 onClicked: SeregaApp.api.auth.login(username.text, password.text)
             }
@@ -112,6 +114,8 @@ Item {
 
                 Layout.preferredWidth: 100
                 Layout.fillWidth: true
+
+                Material.elevation: 6
 
                 onClicked: SeregaApp.api.auth.registerUser(username.text, password.text)
             }
