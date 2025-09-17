@@ -9,7 +9,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(BUILD_TESTS "Build tests" ON)
 
-set(BUILD_SHARED_LIBS OFF)
 set(QT_QML_GENERATE_QMLLS_INI ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
@@ -41,6 +40,10 @@ set(SEREGA_SOURCES
     src/utils/RequestHandler.cpp
 )
 
+if(ANDROID)
+    set(ANDROID_MANIFEST android/AndroidManifest.xml)
+endif()
+
 set_source_files_properties(qml/Navigation.qml
     PROPERTIES
     QT_QML_SINGLETON_TYPE TRUE
@@ -52,7 +55,11 @@ qt_add_library(SeregaLib
 )
 
 qt_add_executable(Serega
+    MANUAL_FINALIZATION
+
     src/main.cpp
+
+    ${ANDROID_MANIFEST}
 )
 
 qt_add_qml_module(Serega
@@ -94,6 +101,7 @@ set_target_properties(Serega PROPERTIES
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
+    QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
 )
 
 set(SODIUM_DISABLE_TESTS ON)
@@ -123,3 +131,5 @@ install(TARGETS Serega
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+qt_finalize_executable(Serega)

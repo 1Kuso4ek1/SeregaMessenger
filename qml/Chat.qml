@@ -90,44 +90,79 @@ Item {
 
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 65
+            Layout.preferredHeight: 80
             Layout.alignment: Qt.AlignBottom
 
             color: Material.background
 
             RowLayout {
                 anchors.fill: parent
-                anchors.margins: 5
+                anchors.leftMargin: 5
+                anchors.bottomMargin: 20
                 spacing: 5
 
-                TextField {
-                    id: messageField
-
+                ScrollView {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
-                    placeholderText: "Message..."
+                    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
-                    onAccepted: {
-                        const res = text.trim()
-                        if(res.length === 0)
-                            return;
-                        clear()
-                        messagesList.model.append({ a: 42 })
-                        messagesList.appended = true
+                    TextArea {
+                        id: messageField
+
+                        placeholderText: "Message..."
+                        focusPolicy: Qt.StrongFocus
+                        verticalAlignment: Qt.AlignVCenter
+                        topPadding: 13.5
+
+                        function sendMessage() {
+                            InputMethod.commit()
+                            const res = messageField.text.trim()
+                            if(res.length === 0)
+                                return
+                            messageField.clear()
+                            messagesList.model.append({ a: 42 })
+                            messagesList.appended = true
+                        }
+
+                        // For PCs
+                        Keys.onPressed: (event) => {
+                            if(event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                                if(event.modifiers & Qt.ShiftModifier)
+                                    event.accepted = false
+                                else {
+                                    sendMessage()
+                                    event.accepted = true
+                                }
+                            }
+                        }
                     }
                 }
 
                 RoundButton {
                     id: sendButton
 
-                    text: "➤"
+                    Layout.preferredWidth: 60
+                    Layout.preferredHeight: 60
+                    Layout.topMargin: 3
+                    Layout.alignment: Qt.AlignVCenter
+
+                    text: ">"
+                    focusPolicy: Qt.NoFocus
 
                     font.pixelSize: 20
                     font.bold: true
 
-                    onClicked: messageField.accepted()
+                    onClicked: messageField.sendMessage()
                 }
+            }
+        }
+
+        Connections {
+            target: InputMethod
+
+            function onVisibleChanged() {
+                messagesList.contentHeightChanged()
             }
         }
     }
