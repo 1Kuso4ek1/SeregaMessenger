@@ -6,7 +6,13 @@ import QtQuick.Layouts
 import SeregaApp
 
 Item {
-    property bool self: index % 3 === 0
+    id: root
+
+    required property var item
+
+    required property bool self
+    required property int index
+    property bool last: index === messagesList.count - 1
 
     height: message.height
 
@@ -16,14 +22,14 @@ Item {
         Item {
             Layout.preferredWidth: {
                 const dif = messagesList.width - message.width
-                return self ? 0 : dif < 600 ? dif : 0
+                return self ? dif < 600 ? dif : 0 : 0
             }
         }
 
         Rectangle {
             id: message
 
-            Layout.preferredWidth: content.implicitWidth + 20
+            Layout.preferredWidth: Math.max(content.implicitWidth, messageInfo.implicitWidth) + 20
             Layout.preferredHeight: layout.implicitHeight
             Layout.maximumWidth: messagesList.width * 0.8
 
@@ -40,24 +46,44 @@ Item {
                     Layout.margins: 10
                     Layout.bottomMargin: 0
 
-                    text: "Lorem ipsum dolor sit amet, occaecat nostrud nostrud aliqua dolor aliquip"
-                    wrapMode: Text.WordWrap
+                    text: item.content
+                    wrapMode: implicitWidth > message.Layout.maximumWidth ? Text.WordWrap : Text.NoWrap
 
                     font.pixelSize: 16
                 }
 
-                Label {
-                    id: time
+                RowLayout {
+                    id: messageInfo
+                    spacing: 10
 
-                    Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignRight
                     Layout.margins: 10
                     Layout.topMargin: 0
                     Layout.leftMargin: 0
 
-                    text: (new Date()).toLocaleString(Qt.locale(), "hh:mm");
+                    Label {
+                        id: messageStatus
 
-                    font.pixelSize: 12
-                    color: "#d0d0d0"
+                        Layout.alignment: Qt.AlignRight
+
+                        text: item.seen ? "seen" : "sent"
+                        visible: last && self
+
+                        font.pixelSize: 12
+                        color: "#d0d0d0"
+                    }
+
+                    Label {
+                        id: time
+
+                        Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+
+                        text: item.created_at.toLocaleString(Qt.locale(), "hh:mm");
+
+                        font.pixelSize: 12
+                        color: "#d0d0d0"
+                    }
                 }
             }
 

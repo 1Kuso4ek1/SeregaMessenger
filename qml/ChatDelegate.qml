@@ -6,6 +6,11 @@ import QtQuick.Layouts
 import SeregaApp
 
 Pane {
+    id: root
+
+    required property int userId
+    required property var item
+
     width: chatsList.width
     height: 100
 
@@ -27,8 +32,10 @@ Pane {
                 Label {
                     Layout.fillWidth: true
 
-                    text: "Hello"
+                    text: item.name
                     horizontalAlignment: Qt.AlignLeft
+
+                    elide: Text.ElideRight
 
                     font.bold: true
                 }
@@ -36,7 +43,7 @@ Pane {
                 Label {
                     Layout.fillWidth: true
 
-                    text: (new Date()).toLocaleString(Qt.locale(), "dd.MM.yyyy hh:mm");
+                    text: item.lastMessageDate.toLocaleString(Qt.locale(), "dd.MM.yyyy hh:mm");
                     horizontalAlignment: Qt.AlignRight
 
                     font.pixelSize: 12
@@ -47,7 +54,7 @@ Pane {
             Label {
                 Layout.fillWidth: true
 
-                text: "Lorem ipsum dolor sit amet, occaecat nostrud nostrud aliqua dolor aliquip"
+                text: item.lastMessage
 
                 elide: Text.ElideRight
             }
@@ -57,7 +64,7 @@ Pane {
     MouseArea {
         anchors.fill: parent
 
-        onClicked: Navigation.push("Chat.qml", {chatName: "Hello"})
+        onClicked: { Navigation.push("Chat.qml", { userId: root.userId, chatId: item.chatId, chatName: item.name }) }
         propagateComposedEvents: true
     }
 }

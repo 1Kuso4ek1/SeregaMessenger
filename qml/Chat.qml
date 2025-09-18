@@ -6,6 +6,8 @@ import QtQuick.Layouts
 import SeregaApp
 
 Item {
+    required property int userId
+    required property int chatId
     required property string chatName
 
     ColumnLayout {
@@ -55,9 +57,11 @@ Item {
         ListModel {
             id: messagesModel
 
-            ListElement { a: 1 }
-            ListElement { a: 2 }
-            ListElement { a: 3 }
+            Component.onCompleted: {
+                messagesModel.append({ message: { id: 1, created_at: new Date(), content: "sup, how ya doin?", sender_id: 2, seen: true } })
+                messagesModel.append({ message: { id: 2, created_at: new Date(), content: "im good cuz, wbu?", sender_id: 1, seen: true } })
+                messagesModel.append({ message: { id: 3, created_at: new Date(), content: "same my man", sender_id: 2, seen: true } })
+            }
         }
 
         ListView {
@@ -84,7 +88,12 @@ Item {
             }
 
             model: messagesModel
-            delegate: Message{}
+            delegate: Message {
+                required property var message
+
+                item: message
+                self: userId === message.sender_id
+            }
             cacheBuffer: 40
         }
 
@@ -121,7 +130,7 @@ Item {
                             if(res.length === 0)
                                 return
                             messageField.clear()
-                            messagesList.model.append({ a: 42 })
+                            messagesList.model.append({ message: { messageId: messagesList.count, created_at: new Date(), content: res, sender_id: userId, seen: true } })
                             messagesList.appended = true
                         }
 
