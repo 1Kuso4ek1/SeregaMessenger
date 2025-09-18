@@ -84,6 +84,7 @@ Item {
 
                     onAccepted: {
                         parent.searchMode = false
+                        chatsModel.append({ chat: { chatId: chatsModel.count, name: displayText, lastMessage: "...", lastMessageDate: new Date() } })
                         Navigation.push("Chat.qml", { userId: root.userId, chatId: 8, chatName: displayText })
                         clear()
                     }
@@ -105,20 +106,42 @@ Item {
             }
         }
 
-        ListView {
-            id: chatsList
-            spacing: 2
-
+        StackLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.margins: 10
 
-            model: chatsModel
-            delegate: ChatDelegate {
-                required property var chat
+            currentIndex: chatsModel.count !== 0 ? 0 : 1
 
-                userId: root.userId
-                item: chat
+            ListView {
+                id: chatsList
+                spacing: 2
+
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.margins: 10
+
+                model: chatsModel
+                delegate: ChatDelegate {
+                    required property var chat
+
+                    userId: root.userId
+                    item: chat
+                }
+            }
+
+            Label {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                text: "ain't no heat on these lines cuz, keep it low."
+                wrapMode: Text.WordWrap
+
+                color: Material.color(Material.Grey, Material.Shade700)
+
+                font.pixelSize: 30
+
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
             }
         }
     }
