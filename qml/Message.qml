@@ -33,6 +33,11 @@ Item {
             Layout.preferredHeight: layout.implicitHeight
             Layout.maximumWidth: messagesList.width * 0.8
 
+            Behavior on opacity { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+
+            opacity: 0.0
+            Component.onCompleted: opacity = 1.0
+
             ColumnLayout {
                 id: layout
 

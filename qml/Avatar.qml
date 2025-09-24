@@ -14,7 +14,7 @@ Item {
     Image {
         id: avatar
 
-        source: avatarUrl || "https://i.postimg.cc/HkR3vr08/ptitsa.png"
+        source: avatarUrl || "qrc:/resources/icons/profile-pic.png"
 
         anchors.fill: parent
 

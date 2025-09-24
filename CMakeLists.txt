@@ -92,6 +92,14 @@ qt_add_resources(Serega
         ${CONFIG_FILE}
 )
 
+qt_add_resources(Serega
+    "icons"
+    PREFIX
+        "/"
+    FILES
+        resources/icons/profile-pic.png
+)
+
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
@@ -109,9 +117,9 @@ set(BUILD_WITH_QT6 ON)
 
 add_subdirectory(libraries/libsodium)
 add_subdirectory(libraries/qtkeychain)
-add_subdirectory(libraries/Catch2)
 
 if(BUILD_TESTS)
+    add_subdirectory(libraries/Catch2)
     enable_testing()
     add_subdirectory(tests)
 endif()
