@@ -20,13 +20,11 @@ Item {
 
         Behavior on contentX { NumberAnimation { duration: 200 } }
 
-        onContentXChanged: {
+        onMovementEnded: {
             if(atXBeginning)
                 Navigation.pop()
-        }
-
-        onMovementEnded: {
-            contentX = 100
+            else
+                contentX = 100
         }
 
         ColumnLayout {
