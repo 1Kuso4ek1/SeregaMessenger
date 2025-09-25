@@ -18,7 +18,7 @@ Item {
         ToolBar {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
-            Layout.preferredHeight: 54
+            Layout.preferredHeight: 54 + parent.SafeArea.margins.top // SafeArea is empty at this point. Do smth with it
 
             Material.primary: Material.color(Material.Grey, Material.Shade900)
             Material.elevation: 6
@@ -34,6 +34,7 @@ Item {
                 font.bold: true
 
                 anchors.fill: parent
+                anchors.topMargin: parent.SafeArea.margins.top
 
                 opacity: searchContainer.searchMode ? 0.0 : 1.0
 
@@ -48,6 +49,7 @@ Item {
 
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.topMargin: parent.SafeArea.margins.top
                 anchors.margins: 20
 
                 width: Math.max(newChatButton.implicitWidth, searchField.implicitWidth)
@@ -79,7 +81,7 @@ Item {
 
                     placeholderText: "Enter username..."
 
-                    onFocusChanged: parent.searchMode = focus
+                    onActiveFocusChanged: parent.searchMode = activeFocus
                     Keys.onEscapePressed: parent.searchMode = false
 
                     onAccepted: {

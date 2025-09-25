@@ -14,12 +14,15 @@ Item {
         id: root
         spacing: 2
 
-        anchors.fill: parent
+        anchors {
+            left: parent.left; top: parent.top
+            right: parent.right; bottom: spacer.top
+        }
 
         ToolBar {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
-            Layout.preferredHeight: 54
+            Layout.preferredHeight: 54 + parent.SafeArea.margins.top
 
             Material.primary: Material.color(Material.Grey, Material.Shade900)
             Material.elevation: 6
@@ -28,6 +31,8 @@ Item {
 
             RoundButton {
                 id: backButton
+                anchors.top: parent.top
+                anchors.topMargin: parent.SafeArea.margins.top
 
                 text: "←"
 
@@ -39,6 +44,7 @@ Item {
 
             RowLayout {
                 anchors.centerIn: parent
+                anchors.verticalCenterOffset: parent.SafeArea.margins.top
 
                 Avatar {}
 
@@ -99,15 +105,15 @@ Item {
 
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 80
+            Layout.preferredHeight: 70 + parent.SafeArea.margins.bottom
             Layout.alignment: Qt.AlignBottom
 
             color: Material.background
 
             RowLayout {
                 anchors.fill: parent
-                anchors.leftMargin: 5
-                anchors.bottomMargin: 20
+                anchors.leftMargin: 12 + parent.SafeArea.margins.left
+                anchors.bottomMargin: 10 + parent.SafeArea.margins.bottom
                 spacing: 5
 
                 ScrollView {
@@ -173,6 +179,17 @@ Item {
             function onVisibleChanged() {
                 messagesList.contentHeightChanged()
             }
+
+            function onKeyboardRectangleChanged() {
+                if(Qt.platform.os !== "android") // For android we use android:windowSoftInputMode="adjustResize"
+                    spacer.height = InputMethod.keyboardRectangle.height
+            }
         }
+    }
+
+    Item {
+        id: spacer
+
+        anchors.bottom: parent.bottom
     }
 }

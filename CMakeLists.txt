@@ -6,8 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-option(BUILD_TESTS "Build tests" ON)
+set(BUILD_SHARED_LIBS OFF)
 
 set(QT_QML_GENERATE_QMLLS_INI ON)
 
@@ -118,7 +117,7 @@ set(BUILD_WITH_QT6 ON)
 add_subdirectory(libraries/libsodium)
 add_subdirectory(libraries/qtkeychain)
 
-if(BUILD_TESTS)
+if(BUILD_TESTING)
     add_subdirectory(libraries/Catch2)
     enable_testing()
     add_subdirectory(tests)
