@@ -14,10 +14,7 @@ Item {
         id: root
         spacing: 2
 
-        anchors {
-            left: parent.left; top: parent.top
-            right: parent.right; bottom: spacer.top
-        }
+        anchors.fill: parent
 
         ToolBar {
             Layout.fillWidth: true
@@ -104,6 +101,8 @@ Item {
         }
 
         Rectangle {
+            id: inputRect
+
             Layout.fillWidth: true
             Layout.preferredHeight: 70 + parent.SafeArea.margins.bottom
             Layout.alignment: Qt.AlignBottom
@@ -182,14 +181,8 @@ Item {
 
             function onKeyboardRectangleChanged() {
                 if(Qt.platform.os !== "android") // For android we use android:windowSoftInputMode="adjustResize"
-                    spacer.height = InputMethod.keyboardRectangle.height
+                    inputRect.Layout.bottomMargin = InputMethod.keyboardRectangle.height
             }
         }
-    }
-
-    Item {
-        id: spacer
-
-        anchors.bottom: parent.bottom
     }
 }

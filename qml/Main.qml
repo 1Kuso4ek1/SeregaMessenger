@@ -9,7 +9,7 @@ ApplicationWindow {
     minimumWidth: 320
     minimumHeight: 240
 
-    flags: Qt.Window | Qt.ExpandedClientAreaHint | Qt.NoTitleBarBackgroundHint
+    flags: Qt.Window | Qt.ExpandedClientAreaHint | Qt.NoTitleBarBackgroundHint | Qt.MaximizeUsingFullscreenGeometryHint
 
     visible: true
     title: "Serega"
