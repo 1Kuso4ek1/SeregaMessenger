@@ -147,4 +147,13 @@ Item {
             }
         }
     }
+
+    Connections {
+        target: InputMethod
+
+        function onVisibleChanged() {
+            if(searchContainer.searchMode) // So the searchMode won't become true when you open the keyboard in the chat
+                searchContainer.searchMode = InputMethod.visible
+        }
+    }
 }
