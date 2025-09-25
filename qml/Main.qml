@@ -14,7 +14,7 @@ ApplicationWindow {
     visible: true
     title: "Serega"
 
-    Material.theme: Material.System
+    Material.theme: Material.Dark
     Material.accent: Material.color(Material.DeepPurple, Material.Shade600)
 
     StackView {
