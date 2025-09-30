@@ -9,18 +9,18 @@ class CryptoManager final : public QObject
 public:
     explicit CryptoManager(SecureStorage& storage, QObject* parent = nullptr);
 
-    void initKeys();
-    void initServerSession(const Key& peerIdentity);
-    void initClientSession(const Key& peerIdentity, const Key& peerPreKey);
+    Q_INVOKABLE void initKeys();
+    Q_INVOKABLE void initServerSession(const Key& peerIdentity);
+    Q_INVOKABLE void initClientSession(const Key& peerIdentity, const Key& peerPreKey);
 
-    void save() const;
-    bool load();
+    Q_INVOKABLE void save() const;
+    Q_INVOKABLE bool load();
 
-    Key getPublicKey() const;
-    Key getPublicPreKey() const;
+    Q_INVOKABLE Key getPublicKey() const;
+    Q_INVOKABLE Key getPublicPreKey() const;
 
-    std::vector<uint8_t> encrypt(const QString& text) const;
-    QString decrypt(const std::vector<uint8_t>& data) const;
+    Q_INVOKABLE std::vector<uint8_t> encrypt(const QString& text) const;
+    Q_INVOKABLE QString decrypt(const std::vector<uint8_t>& data) const;
 
 private:
     SecureStorage& storage;

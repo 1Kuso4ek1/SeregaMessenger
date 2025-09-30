@@ -13,6 +13,9 @@ void CryptoManager::initKeys()
 {
     crypto_kx_keypair(identity.publicKey.data(), identity.privateKey.data());
     crypto_kx_keypair(preKey.publicKey.data(), preKey.privateKey.data());
+
+    qDebug() << "Identity init: { public:" << identity.publicKey << ", private:" << identity.privateKey << "}";
+    qDebug() << "Prekey init: { public:" << preKey.publicKey << ", private:" << preKey.privateKey << "}";
 }
 
 void CryptoManager::initServerSession(const Key& peerIdentity)

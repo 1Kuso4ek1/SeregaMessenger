@@ -18,7 +18,7 @@ Item {
         ToolBar {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
-            Layout.preferredHeight: 54 + parent.SafeArea.margins.top // SafeArea is empty at this point. Do smth with it
+            Layout.preferredHeight: 54
 
             Material.primary: Material.color(Material.Grey, Material.Shade900)
             Material.elevation: 6

@@ -19,7 +19,8 @@ Item {
         target: SeregaApp.api.auth
 
         function onUserLoggedIn() {
-            Navigation.replace("Chats.qml")
+            SeregaApp.crypto.initKeys()
+            Navigation.replace("Chats.qml", { userId: 1 })
             console.log("success")
         }
     }

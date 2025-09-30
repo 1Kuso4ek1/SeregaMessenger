@@ -52,7 +52,7 @@ Item {
                     Layout.bottomMargin: 0
 
                     text: item.content
-                    wrapMode: implicitWidth > message.Layout.maximumWidth ? Text.WordWrap : Text.NoWrap
+                    wrapMode: implicitWidth > message.Layout.maximumWidth ? Text.WrapAtWordBoundaryOrAnywhere : Text.NoWrap
 
                     font.pixelSize: 16
                 }
