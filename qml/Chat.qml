@@ -124,9 +124,9 @@ Item {
                 Component.onCompleted: positionViewAtEnd()
                 // A very hacky way to scroll down the list independently of the delegates' height
                 onContentHeightChanged: {
-                    if (!appended)
+                    if(!appended)
                         return
-                    if (contentHeight - prev > 0)
+                    if(contentHeight - prev > 0)
                         positionViewAtEnd()
                     else
                         appended = false
@@ -229,7 +229,7 @@ Item {
                 }
 
                 function onKeyboardRectangleChanged() {
-                    if (Qt.platform.os !== "android") // For android we use android:windowSoftInputMode="adjustResize"
+                    if(Qt.platform.os !== "android") // For android we use android:windowSoftInputMode="adjustResize"
                         root.anchors.topMargin = InputMethod.keyboardRectangle.height
                 }
             }
