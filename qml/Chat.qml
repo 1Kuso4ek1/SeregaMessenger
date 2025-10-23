@@ -10,6 +10,16 @@ Item {
     required property int chatId
     required property string chatName
 
+    Connections {
+        target: InputMethod
+
+        function onKeyboardRectangleChanged() {
+            if(Qt.platform.os !== "android") // For android we use android:windowSoftInputMode="adjustResize"
+                root.anchors.topMargin = InputMethod.keyboardRectangle.height
+            messagesList.positionViewAtEnd()
+        }
+    }
+
     Flickable {
         anchors.fill: parent
 
@@ -61,8 +71,7 @@ Item {
                     anchors.centerIn: parent
                     anchors.verticalCenterOffset: parent.SafeArea.margins.top
 
-                    Avatar {
-                    }
+                    Avatar {}
 
                     Label {
                         text: chatName
@@ -113,25 +122,14 @@ Item {
             ListView {
                 id: messagesList
                 spacing: 6
+                cacheBuffer: 1000
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.margins: 10
-
-                property var prev: 0
-                property var appended: false
+                Layout.bottomMargin: 0
 
                 Component.onCompleted: positionViewAtEnd()
-                // A very hacky way to scroll down the list independently of the delegates' height
-                onContentHeightChanged: {
-                    if(!appended)
-                        return
-                    if(contentHeight - prev > 0)
-                        positionViewAtEnd()
-                    else
-                        appended = false
-                    prev = contentHeight
-                }
 
                 model: messagesModel
                 delegate: Message {
@@ -140,7 +138,6 @@ Item {
                     item: message
                     self: userId === message.sender_id
                 }
-                cacheBuffer: 40
             }
 
             Rectangle {
@@ -161,6 +158,7 @@ Item {
                         Layout.fillHeight: true
 
                         ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+                        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
                         TextArea {
                             id: messageField
@@ -168,12 +166,15 @@ Item {
                             placeholderText: "Message..."
                             focusPolicy: Qt.StrongFocus
                             verticalAlignment: Qt.AlignVCenter
-                            topPadding: 13.5
+                            topPadding: 14
+                            bottomPadding: 10.0
+
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 
                             function sendMessage() {
                                 InputMethod.commit()
                                 const res = messageField.text.trim()
-                                if (res.length === 0)
+                                if(res.length === 0)
                                     return
                                 messageField.clear()
                                 messagesList.model.append({
@@ -185,7 +186,7 @@ Item {
                                         seen: true
                                     }
                                 })
-                                messagesList.appended = true
+                                messagesList.positionViewAtEnd()
                             }
 
                             // For PCs
@@ -218,19 +219,6 @@ Item {
 
                         onClicked: messageField.sendMessage()
                     }
-                }
-            }
-
-            Connections {
-                target: InputMethod
-
-                function onVisibleChanged() {
-                    messagesList.contentHeightChanged()
-                }
-
-                function onKeyboardRectangleChanged() {
-                    if(Qt.platform.os !== "android") // For android we use android:windowSoftInputMode="adjustResize"
-                        root.anchors.topMargin = InputMethod.keyboardRectangle.height
                 }
             }
         }

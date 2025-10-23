@@ -41,6 +41,7 @@ Item {
             ColumnLayout {
                 id: layout
 
+                // Make this a TextEdit to make text selection available
                 Label {
                     id: content
 
@@ -51,10 +52,19 @@ Item {
                     Layout.margins: 10
                     Layout.bottomMargin: 0
 
+                    // Cause the default color for 'TextEdit' is black
+                    // color: "white"
+
+                    // readOnly: true
+                    // selectByMouse: true
+
                     text: item.content
+                    textFormat: Text.MarkdownText
                     wrapMode: implicitWidth > message.Layout.maximumWidth ? Text.WrapAtWordBoundaryOrAnywhere : Text.NoWrap
 
                     font.pixelSize: 16
+
+                    onLinkActivated: (link) => Qt.openUrlExternally(link)
                 }
 
                 RowLayout {

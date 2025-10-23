@@ -15,10 +15,16 @@ ApplicationWindow {
     visible: true
     title: "Serega"
 
-    header: ToolBar { // For the status bar background on mobile
+    header: Rectangle { // For the status bar background on mobile
         implicitHeight: parent.SafeArea.margins.top
 
-        Material.primary: Material.color(Material.Grey, Material.Shade900)
+        color: Material.color(Material.Grey, Material.Shade900)
+    }
+
+    footer: Rectangle { // Leaving no gap at the bottom
+        implicitHeight: parent.SafeArea.margins.bottom
+
+        color: Material.color(Material.Grey, Material.Shade900)
     }
 
     Material.theme: Material.Dark
